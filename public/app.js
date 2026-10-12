@@ -6,20 +6,22 @@ const topbar = document.querySelector('.topbar');
 const MAX_LEN = Math.max(...DINOS.map((d) => d.len));
 const KID_LEN = 1.3;
 
-let lang = 'id';
-try { lang = localStorage.getItem('lang') || 'id'; } catch {}
+const pref = (k, def) => { try { return localStorage.getItem(k) || def; } catch { return def; } };
+const save = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+let lang = pref('lang', 'id');
+let mode = pref('mode', 'cartoon'); // 'cartoon' | 'real' — the viewer's default look
+let filter = 'all', query = '';
 const t = () => UI[lang];
 const L = (obj) => obj[lang];
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`); // image credits come from Commons metadata
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((p) => p[1]);
 
 // ---------- sound ----------
 const clips = {};
-const VOLUME = { 'roar-big': 0.7 }; // roar-big is mastered hotter than the rest
 function playDino(d) {
   const a = (clips[d.sound] ??= new Audio(`sounds/${d.sound}.mp3`));
   a.preservesPitch = false;
   a.playbackRate = d.rate;
-  a.volume = VOLUME[d.sound] ?? 1;
   a.currentTime = 0;
   a.play().catch(() => {});
 }
@@ -64,26 +66,67 @@ function confetti() {
   }
 }
 
+// Cartoon SVG, or the realistic paleoart when that mode is on and the animal has one.
+// `cartoon` forces the SVG (quiz silhouettes need a transparent shape).
+function art(d, cls = '', cartoon = false, lazy = true) {
+  if (mode !== 'real' || !d.image || cartoon) return dinoSVG(d, cls);
+  return `<span class="real-wrap${d.image.flip ? ' flipped' : ''}"><img class="real ${d.kind} ${cls}" src="${d.image.file}" alt="${d.name}"${lazy ? ' loading="lazy"' : ''}></span>`;
+}
+
 // ---------- views ----------
 function header() {
   topbar.innerHTML = `<a href="#/" class="logo">🦖 ${t().title}</a>
     <nav><a class="btn" href="#/quiz">❓ ${t().quiz}</a>
+    <button class="btn mode" aria-pressed="${mode === 'real'}" title="${t().modeHint}">${mode === 'real' ? t().modeReal : t().modeCartoon}</button>
     <button class="btn lang" aria-label="${t().langLabel}">🌐 ${t().lang}</button></nav>`;
   topbar.querySelector('.lang').onclick = () => {
     lang = lang === 'id' ? 'en' : 'id';
-    try { localStorage.setItem('lang', lang); } catch {}
+    save('lang', lang);
     header();
     route();
+  };
+  topbar.querySelector('.mode').onclick = () => {
+    mode = mode === 'real' ? 'cartoon' : 'real';
+    save('mode', mode);
+    header();
+    route(false);
   };
   document.documentElement.lang = lang;
 }
 
+const FILTERS = {
+  all: () => true,
+  meat: (d) => d.diet !== 'plant',
+  plant: (d) => d.diet === 'plant' || d.diet === 'omni',
+  sky: (d) => d.scene === 'sky',
+  sea: (d) => d.scene === 'sea',
+};
+
 function home() {
   app.innerHTML = `<p class="subtitle">${t().subtitle}</p>
-    <div class="grid">${DINOS.map((d, i) => `
-      <a class="card" href="#/dino/${d.slug}" style="--i:${i};--c:${d.colors[0]}">
-        ${dinoSVG(d)}<span class="card-name">${d.name}</span><span class="card-meaning">${L(d.meaning)}</span>
-      </a>`).join('')}</div>`;
+    <div class="filters">
+      <input class="search" type="search" placeholder="🔎 ${t().search}" aria-label="${t().search}" value="${query.replace(/"/g, '&quot;')}">
+      <div class="chips-row">${Object.keys(FILTERS).map((f) => `<button class="btn filter${f === filter ? ' active' : ''}" data-f="${f}" aria-pressed="${f === filter}">${t().filters[f]}</button>`).join('')}</div>
+    </div>
+    <p class="count" aria-live="polite"></p>
+    <div class="grid"></div>`;
+  const grid = app.querySelector('.grid');
+  const draw = () => {
+    const q = query.trim().toLowerCase();
+    const list = DINOS.filter((d) => FILTERS[filter](d) && (!q || d.name.toLowerCase().includes(q) || L(d.meaning).toLowerCase().includes(q)));
+    app.querySelector('.count').textContent = list.length ? t().count(list.length) : t().none;
+    grid.innerHTML = list.map((d, i) => `
+      <a class="card" href="#/dino/${d.slug}" style="--i:${Math.min(i, 12)};--c:${d.colors[0]}">
+        ${art(d)}<span class="card-name">${d.name}</span><span class="card-meaning">${L(d.meaning)}</span>
+      </a>`).join('');
+  };
+  app.querySelector('.search').oninput = (e) => { query = e.target.value; draw(); };
+  app.querySelectorAll('.filter').forEach((b) => b.onclick = () => {
+    filter = b.dataset.f;
+    app.querySelectorAll('.filter').forEach((x) => { x.classList.toggle('active', x === b); x.setAttribute('aria-pressed', x === b); });
+    draw();
+  });
+  draw();
 }
 
 const SCENERY = {
@@ -107,9 +150,10 @@ function detail(d) {
     <a class="btn" href="#/">⬅ ${t().back}</a>
     <section class="stage scene-${d.scene}">
       ${SCENERY[d.scene]}
-      <button class="walker" aria-label="${t().roar}"><span class="flip">${dinoSVG(d, 'walking')}</span></button>
+      <button class="walker" aria-label="${t().roar}"><span class="flip">${art(d, 'walking', false, false)}</span></button>
       <span class="tap-hint">👆 ${t().tap}</span>
     </section>
+    ${mode === 'real' && d.image ? `<p class="credit">📷 ${t().credit}: <a href="${esc(d.image.source)}" target="_blank" rel="noopener">${esc(d.image.author)}</a> · ${esc(d.image.license)}</p>` : ''}
     <h2 class="dino-name">${d.name}</h2>
     ${d.notDino ? `<p class="badge">⚠️ ${t().notDino}</p>` : ''}
     <p class="meaning">${t().meaning}: <b>“${L(d.meaning)}”</b></p>
@@ -123,7 +167,7 @@ function detail(d) {
       <h3>📐 ${t().howBig}</h3>
       <div class="size-row"><span class="who">🧒</span><div class="bar" style="--w:${(KID_LEN / MAX_LEN) * 100}%;--c:#ff8a3d"></div></div>
       <div class="bar-label">${t().you} ≈ ${lang === 'id' ? '1,3' : '1.3'} m</div>
-      <div class="size-row">${dinoSVG(d)}<div class="bar" style="--w:${(d.len / MAX_LEN) * 100}%;--c:${d.colors[0]}"></div></div>
+      <div class="size-row">${art(d)}<div class="bar" style="--w:${(d.len / MAX_LEN) * 100}%;--c:${d.colors[0]}"></div></div>
       <div class="bar-label">${d.name}: ${L(d.length)}</div>
       <p><b>${t().timesYou(Math.max(1, Math.round(d.len / KID_LEN)))}</b></p>
     </section>
@@ -136,7 +180,7 @@ function detail(d) {
       <a class="btn" href="#/dino/${next.slug}">${next.name} ➡</a>
     </nav>`;
 
-  const walker = app.querySelector('.walker'), svg = walker.querySelector('svg');
+  const walker = app.querySelector('.walker'), svg = walker.querySelector('.dino, .real');
   const roar = () => {
     app.querySelector('.tap-hint')?.remove();
     playDino(d);
@@ -147,6 +191,14 @@ function detail(d) {
     clearTimeout(roarTimer);
     roarTimer = setTimeout(() => { svg.classList.remove('roaring'); walker.classList.remove('paused'); }, 1200);
   };
+  // Paleoart is cut out (transparent); the few with a painted backdrop (opaque corner pixel) are shown framed.
+  const img = walker.querySelector('img');
+  const sniff = () => {
+    const c = Object.assign(document.createElement('canvas'), { width: 1, height: 1 }).getContext('2d');
+    c.drawImage(img, 0, 0, 1, 1, 0, 0, 1, 1);
+    if (c.getImageData(0, 0, 1, 1).data[3] === 255) walker.classList.add('framed');
+  };
+  if (img) img.complete && img.naturalWidth ? sniff() : img.addEventListener('load', sniff, { once: true });
   walker.onclick = roar;
   app.querySelector('.roar-btn').onclick = roar;
   app.querySelector('.read-btn').onclick = (e) =>
@@ -158,7 +210,7 @@ function makeQuiz(dinos = DINOS) {
   const pick = (n, pool) => shuffle(pool).slice(0, n);
   const qs = [];
   for (const d of pick(3, dinos)) qs.push({ type: 'who', dino: d, options: shuffle([d, ...pick(2, dinos.filter((x) => x !== d))]), answer: d });
-  for (const d of pick(2, dinos)) qs.push({ type: 'food', dino: d, options: ['plant', 'meat'], answer: d.diet === 'plant' ? 'plant' : 'meat' });
+  for (const d of pick(2, dinos.filter((x) => x.diet !== 'omni'))) qs.push({ type: 'food', dino: d, options: ['plant', 'meat'], answer: d.diet === 'plant' ? 'plant' : 'meat' });
   // Length question: real dinos only (pteranodon's number is a wingspan), at least 3 m apart so it's not a trick.
   const real = dinos.filter((d) => !d.notDino);
   const [a] = pick(1, real);
@@ -181,12 +233,12 @@ function quiz() {
     }
     const q = qs[n];
     const title = { who: t().qWho, food: q.dino && t().qFood(q.dino.name), bigger: t().qBigger }[q.type];
-    const art = q.type === 'bigger' ? '' : `<div class="q-art ${q.type === 'who' ? 'silhouette' : ''}">${dinoSVG(q.dino, 'walking')}</div>`;
+    const pic = q.type === 'bigger' ? '' : `<div class="q-art ${q.type === 'who' ? 'silhouette' : ''}">${art(q.dino, 'walking', q.type === 'who')}</div>`;
     const label = (o) => q.type === 'food' ? (o === 'plant' ? t().plants : t().animals)
-      : q.type === 'bigger' ? `${dinoSVG(o)}${o.name}` : o.name;
+      : q.type === 'bigger' ? `${art(o)}${o.name}` : o.name;
     app.innerHTML = `<div class="quiz">
       <div class="dots">${qs.map((_, j) => `<span class="${j < n ? 'done' : ''}"></span>`).join('')}</div>
-      <h2 class="question">${title}</h2>${art}
+      <h2 class="question">${title}</h2>${pic}
       <div class="options">${q.options.map((o, j) => `<button class="opt" data-j="${j}" style="--i:${j}">${label(o)}</button>`).join('')}</div>
       <p class="feedback" aria-live="polite"></p><p class="next-wrap"></p></div>`;
     app.querySelectorAll('.opt').forEach((btn) => btn.onclick = () => {
@@ -211,15 +263,15 @@ function quiz() {
 }
 
 // ---------- router ----------
-function route() {
+function route(scroll = true) {
   window.speechSynthesis?.cancel();
   const [, page, slug] = location.hash.split('/');
   if (page === 'dino') detail(DINOS.find((d) => d.slug === slug) ?? DINOS[0]);
   else if (page === 'quiz') quiz();
   else home();
-  scrollTo(0, 0);
+  if (scroll) scrollTo(0, 0);
 }
 
-addEventListener('hashchange', route);
+addEventListener('hashchange', () => route());
 header();
 route();

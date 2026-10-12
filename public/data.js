@@ -1,6 +1,15 @@
 // Dino content. Every text field has both `id` (Bahasa Indonesia) and `en`.
 // kind = which SVG body template to draw (see dinos.js), sound = file in sounds/ (rate tweaks the pitch).
-export const DINOS = [
+// image = realistic paleoart from Wikimedia Commons (credited in the app), or null → cartoon in both modes.
+import batch1 from './data/batch-1.js';
+import batch2 from './data/batch-2.js';
+import batch3 from './data/batch-3.js';
+import batch4 from './data/batch-4.js';
+import batch5 from './data/batch-5.js';
+import batch6 from './data/batch-6.js';
+import coreImages from './data/existing-images.js';
+
+const CORE = [
   {
     slug: 'trex', name: 'Tyrannosaurus rex', kind: 'theropod', colors: ['#5fa35a', '#3e7a3b', '#d9e8a6'],
     sound: 'roar-big', rate: 1, diet: 'meat', len: 12, scene: 'land',
@@ -173,12 +182,20 @@ export const DINOS = [
   },
 ];
 
+export const DINOS = [
+  ...CORE.map((d) => ({ ...d, image: coreImages[d.slug] ?? null })),
+  ...batch1, ...batch2, ...batch3, ...batch4, ...batch5, ...batch6,
+];
+
 export const UI = {
   id: {
     title: 'Dino Explorer', subtitle: 'Ketuk dinosaurus untuk berkenalan!', quiz: 'Kuis Dino', back: 'Kembali',
     roar: 'Dengar suaranya', read: 'Bacakan', stop: 'Berhenti', tap: 'Ketuk aku!',
     meaning: 'Artinya', period: 'Zaman', food: 'Makanan', length: 'Panjang', weight: 'Berat', place: 'Ditemukan di',
-    diet: { plant: '🌿 Pemakan tumbuhan', meat: '🍖 Pemakan daging', fish: '🐟 Pemakan ikan' },
+    diet: { plant: '🌿 Pemakan tumbuhan', meat: '🍖 Pemakan daging', fish: '🐟 Pemakan ikan', omni: '🍽️ Pemakan segala' },
+    modeCartoon: '🎨 Animasi', modeReal: '📷 Realistis', modeHint: 'Ganti tampilan kartun / realistis (diingat untuk kunjungan berikutnya)',
+    search: 'Cari dino…', count: (n) => `${n} hewan purba`, none: 'Tidak ketemu. Coba kata lain!', credit: 'Gambar',
+    filters: { all: '🦖 Semua', meat: '🍖 Pemakan daging', plant: '🌿 Pemakan tumbuhan', sky: '🪽 Terbang', sea: '🌊 Laut' },
     howBig: 'Seberapa besar?', you: 'Kamu', timesYou: (n) => `Kira-kira ${n} kali panjang tubuhmu!`,
     didYouKnow: 'Tahukah kamu?', notDino: 'Bukan dinosaurus!', prev: 'Sebelumnya', next: 'Berikutnya',
     qWho: 'Siapa aku?', qFood: (n) => `Apa makanan ${n}?`, qBigger: 'Mana yang lebih panjang?',
@@ -190,7 +207,10 @@ export const UI = {
     title: 'Dino Explorer', subtitle: 'Tap a dinosaur to meet it!', quiz: 'Dino Quiz', back: 'Back',
     roar: 'Hear it', read: 'Read to me', stop: 'Stop', tap: 'Tap me!',
     meaning: 'Name means', period: 'When', food: 'Food', length: 'Length', weight: 'Weight', place: 'Found in',
-    diet: { plant: '🌿 Plant-eater', meat: '🍖 Meat-eater', fish: '🐟 Fish-eater' },
+    diet: { plant: '🌿 Plant-eater', meat: '🍖 Meat-eater', fish: '🐟 Fish-eater', omni: '🍽️ Eats everything' },
+    modeCartoon: '🎨 Cartoon', modeReal: '📷 Realistic', modeHint: 'Switch cartoon / realistic look (remembered for next time)',
+    search: 'Search dinos…', count: (n) => `${n} prehistoric animals`, none: 'Nothing found. Try another word!', credit: 'Image',
+    filters: { all: '🦖 All', meat: '🍖 Meat-eaters', plant: '🌿 Plant-eaters', sky: '🪽 Flyers', sea: '🌊 Sea' },
     howBig: 'How big?', you: 'You', timesYou: (n) => `About ${n} times as long as you!`,
     didYouKnow: 'Did you know?', notDino: 'Not a dinosaur!', prev: 'Previous', next: 'Next',
     qWho: 'Who am I?', qFood: (n) => `What did ${n} eat?`, qBigger: 'Which one was longer?',
