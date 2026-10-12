@@ -14,7 +14,6 @@ let filter = 'all', query = '';
 const t = () => UI[lang];
 const L = (obj) => obj[lang];
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`); // image credits come from Commons metadata
-const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((p) => p[1]);
 
 // ---------- sound ----------
 const clips = {};
@@ -24,20 +23,6 @@ function playDino(d) {
   a.playbackRate = d.rate;
   a.currentTime = 0;
   a.play().catch(() => {});
-}
-
-let ctx;
-function chime(ok) {
-  ctx ??= new AudioContext();
-  (ok ? [523, 659, 784] : [220, 165]).forEach((f, i) => {
-    const osc = ctx.createOscillator(), gain = ctx.createGain(), t0 = ctx.currentTime + i * 0.12;
-    osc.type = ok ? 'triangle' : 'square';
-    osc.frequency.value = f;
-    gain.gain.setValueAtTime(0.15, t0);
-    gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.3);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(t0); osc.stop(t0 + 0.32);
-  });
 }
 
 function speak(text, btn) {
@@ -55,29 +40,16 @@ function speak(text, btn) {
   s.speak(u);
 }
 
-function confetti() {
-  const colors = ['#ff8a3d', '#ffd84a', '#3bb54a', '#2a7fff', '#e06a7a', '#9c7ad1'];
-  for (let i = 0; i < 40; i++) {
-    const c = document.createElement('span');
-    c.className = 'confetti';
-    c.style.cssText = `left:${Math.random() * 100}vw;background:${colors[i % colors.length]};animation-delay:${Math.random() * 0.5}s`;
-    document.body.append(c);
-    setTimeout(() => c.remove(), 3000);
-  }
-}
-
 // Cartoon SVG, or the realistic paleoart when that mode is on and the animal has one.
-// `cartoon` forces the SVG (quiz silhouettes need a transparent shape).
-function art(d, cls = '', cartoon = false, lazy = true) {
-  if (mode !== 'real' || !d.image || cartoon) return dinoSVG(d, cls);
+function art(d, cls = '', lazy = true) {
+  if (mode !== 'real' || !d.image) return dinoSVG(d, cls);
   return `<span class="real-wrap${d.image.flip ? ' flipped' : ''}"><img class="real ${d.kind} ${cls}" src="${d.image.file}" alt="${d.name}"${lazy ? ' loading="lazy"' : ''}></span>`;
 }
 
 // ---------- views ----------
 function header() {
   topbar.innerHTML = `<a href="#/" class="logo">🦖 ${t().title}</a>
-    <nav><a class="btn" href="#/quiz">❓ ${t().quiz}</a>
-    <button class="btn mode" aria-pressed="${mode === 'real'}" title="${t().modeHint}">${mode === 'real' ? t().modeReal : t().modeCartoon}</button>
+    <nav><button class="btn mode" aria-pressed="${mode === 'real'}" title="${t().modeHint}">${mode === 'real' ? t().modeReal : t().modeCartoon}</button>
     <button class="btn lang" aria-label="${t().langLabel}">🌐 ${t().lang}</button></nav>`;
   topbar.querySelector('.lang').onclick = () => {
     lang = lang === 'id' ? 'en' : 'id';
@@ -150,7 +122,7 @@ function detail(d) {
     <a class="btn" href="#/">⬅ ${t().back}</a>
     <section class="stage scene-${d.scene}">
       ${SCENERY[d.scene]}
-      <button class="walker" aria-label="${t().roar}"><span class="flip">${art(d, 'walking', false, false)}</span></button>
+      <button class="walker" aria-label="${t().roar}"><span class="flip">${art(d, 'walking', false)}</span></button>
       <span class="tap-hint">👆 ${t().tap}</span>
     </section>
     ${mode === 'real' && d.image ? `<p class="credit">📷 ${t().credit}: <a href="${esc(d.image.source)}" target="_blank" rel="noopener">${esc(d.image.author)}</a> · ${esc(d.image.license)}</p>` : ''}
@@ -205,69 +177,11 @@ function detail(d) {
     speak([d.name + '.', `${t().meaning}: ${L(d.meaning)}.`, L(d.desc), t().didYouKnow, ...L(d.facts)].join(' '), e.currentTarget);
 }
 
-// ---------- quiz ----------
-function makeQuiz(dinos = DINOS) {
-  const pick = (n, pool) => shuffle(pool).slice(0, n);
-  const qs = [];
-  for (const d of pick(3, dinos)) qs.push({ type: 'who', dino: d, options: shuffle([d, ...pick(2, dinos.filter((x) => x !== d))]), answer: d });
-  for (const d of pick(2, dinos.filter((x) => x.diet !== 'omni'))) qs.push({ type: 'food', dino: d, options: ['plant', 'meat'], answer: d.diet === 'plant' ? 'plant' : 'meat' });
-  // Length question: real dinos only (pteranodon's number is a wingspan), at least 3 m apart so it's not a trick.
-  const real = dinos.filter((d) => !d.notDino);
-  const [a] = pick(1, real);
-  const [b] = pick(1, real.filter((x) => Math.abs(x.len - a.len) >= 3));
-  qs.push({ type: 'bigger', options: shuffle([a, b]), answer: a.len > b.len ? a : b });
-  return shuffle(qs);
-}
-
-function quiz() {
-  const qs = makeQuiz();
-  let n = 0, score = 0;
-  const show = () => {
-    if (n === qs.length) {
-      app.innerHTML = `<div class="quiz"><div class="stars">${'⭐'.repeat(score) || '🦕'}</div>
-        <h2 class="question">${t().score(score, qs.length)}</h2>
-        <p><button class="btn big again">🔁 ${t().again}</button> <a class="btn" href="#/">🏠 ${t().home}</a></p></div>`;
-      app.querySelector('.again').onclick = quiz;
-      if (score >= qs.length - 1) confetti();
-      return;
-    }
-    const q = qs[n];
-    const title = { who: t().qWho, food: q.dino && t().qFood(q.dino.name), bigger: t().qBigger }[q.type];
-    const pic = q.type === 'bigger' ? '' : `<div class="q-art ${q.type === 'who' ? 'silhouette' : ''}">${art(q.dino, 'walking', q.type === 'who')}</div>`;
-    const label = (o) => q.type === 'food' ? (o === 'plant' ? t().plants : t().animals)
-      : q.type === 'bigger' ? `${art(o)}${o.name}` : o.name;
-    app.innerHTML = `<div class="quiz">
-      <div class="dots">${qs.map((_, j) => `<span class="${j < n ? 'done' : ''}"></span>`).join('')}</div>
-      <h2 class="question">${title}</h2>${pic}
-      <div class="options">${q.options.map((o, j) => `<button class="opt" data-j="${j}" style="--i:${j}">${label(o)}</button>`).join('')}</div>
-      <p class="feedback" aria-live="polite"></p><p class="next-wrap"></p></div>`;
-    app.querySelectorAll('.opt').forEach((btn) => btn.onclick = () => {
-      const chosen = q.options[btn.dataset.j], ok = chosen === q.answer;
-      app.querySelectorAll('.opt').forEach((b) => {
-        b.disabled = true;
-        if (q.options[b.dataset.j] === q.answer) b.classList.add('right');
-      });
-      if (!ok) btn.classList.add('wrong');
-      app.querySelector('.silhouette')?.classList.remove('silhouette');
-      chime(ok);
-      if (ok) { score++; confetti(); }
-      if (q.dino) setTimeout(() => playDino(q.dino), 400);
-      app.querySelector('.feedback').textContent = ok ? `🎉 ${t().correct}` : `${t().wrong} ${q.type === 'food' ? label(q.answer) : q.answer.name}`;
-      const nextBtn = Object.assign(document.createElement('button'), { className: 'btn big', textContent: t().nextQ });
-      nextBtn.onclick = () => { n++; show(); };
-      app.querySelector('.next-wrap').append(nextBtn);
-      nextBtn.focus();
-    });
-  };
-  show();
-}
-
 // ---------- router ----------
 function route(scroll = true) {
   window.speechSynthesis?.cancel();
   const [, page, slug] = location.hash.split('/');
   if (page === 'dino') detail(DINOS.find((d) => d.slug === slug) ?? DINOS[0]);
-  else if (page === 'quiz') quiz();
   else home();
   if (scroll) scrollTo(0, 0);
 }

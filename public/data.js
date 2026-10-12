@@ -189,7 +189,7 @@ export const DINOS = [
 
 export const UI = {
   id: {
-    title: 'Dino Explorer', subtitle: 'Ketuk dinosaurus untuk berkenalan!', quiz: 'Kuis Dino', back: 'Kembali',
+    title: 'Dino Explorer', subtitle: 'Ketuk dinosaurus untuk berkenalan!', back: 'Kembali',
     roar: 'Dengar suaranya', read: 'Bacakan', stop: 'Berhenti', tap: 'Ketuk aku!',
     meaning: 'Artinya', period: 'Zaman', food: 'Makanan', length: 'Panjang', weight: 'Berat', place: 'Ditemukan di',
     diet: { plant: '🌿 Pemakan tumbuhan', meat: '🍖 Pemakan daging', fish: '🐟 Pemakan ikan', omni: '🍽️ Pemakan segala' },
@@ -198,13 +198,10 @@ export const UI = {
     filters: { all: '🦖 Semua', meat: '🍖 Pemakan daging', plant: '🌿 Pemakan tumbuhan', sky: '🪽 Terbang', sea: '🌊 Laut' },
     howBig: 'Seberapa besar?', you: 'Kamu', timesYou: (n) => `Kira-kira ${n} kali panjang tubuhmu!`,
     didYouKnow: 'Tahukah kamu?', notDino: 'Bukan dinosaurus!', prev: 'Sebelumnya', next: 'Berikutnya',
-    qWho: 'Siapa aku?', qFood: (n) => `Apa makanan ${n}?`, qBigger: 'Mana yang lebih panjang?',
-    plants: '🌿 Tumbuhan', animals: '🍖 Hewan lain', correct: 'Hebat! Benar!', wrong: 'Hampir! Jawabannya:',
-    nextQ: 'Lanjut ➜', score: (s, t) => `Kamu benar ${s} dari ${t}!`, again: 'Main lagi', home: 'Ke beranda',
     lang: 'EN', langLabel: 'Switch to English',
   },
   en: {
-    title: 'Dino Explorer', subtitle: 'Tap a dinosaur to meet it!', quiz: 'Dino Quiz', back: 'Back',
+    title: 'Dino Explorer', subtitle: 'Tap a dinosaur to meet it!', back: 'Back',
     roar: 'Hear it', read: 'Read to me', stop: 'Stop', tap: 'Tap me!',
     meaning: 'Name means', period: 'When', food: 'Food', length: 'Length', weight: 'Weight', place: 'Found in',
     diet: { plant: '🌿 Plant-eater', meat: '🍖 Meat-eater', fish: '🐟 Fish-eater', omni: '🍽️ Eats everything' },
@@ -213,9 +210,6 @@ export const UI = {
     filters: { all: '🦖 All', meat: '🍖 Meat-eaters', plant: '🌿 Plant-eaters', sky: '🪽 Flyers', sea: '🌊 Sea' },
     howBig: 'How big?', you: 'You', timesYou: (n) => `About ${n} times as long as you!`,
     didYouKnow: 'Did you know?', notDino: 'Not a dinosaur!', prev: 'Previous', next: 'Next',
-    qWho: 'Who am I?', qFood: (n) => `What did ${n} eat?`, qBigger: 'Which one was longer?',
-    plants: '🌿 Plants', animals: '🍖 Other animals', correct: 'Great job! Correct!', wrong: 'So close! The answer is:',
-    nextQ: 'Next ➜', score: (s, t) => `You got ${s} out of ${t}!`, again: 'Play again', home: 'Home',
     lang: 'ID', langLabel: 'Ganti ke Bahasa Indonesia',
   },
 };
