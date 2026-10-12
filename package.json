@@ -1,0 +1,10 @@
+{
+  "name": "dino-explorer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "dev": "python3 -m http.server 8787 -d public",
+    "deploy": "npx wrangler pages deploy public --project-name dino-explorer --branch main"
+  }
+}

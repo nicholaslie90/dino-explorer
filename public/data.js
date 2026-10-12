@@ -1,0 +1,201 @@
+// Dino content. Every text field has both `id` (Bahasa Indonesia) and `en`.
+// kind = which SVG body template to draw (see dinos.js), sound = file in sounds/ (rate tweaks the pitch).
+export const DINOS = [
+  {
+    slug: 'trex', name: 'Tyrannosaurus rex', kind: 'theropod', colors: ['#5fa35a', '#3e7a3b', '#d9e8a6'],
+    sound: 'roar-big', rate: 1, diet: 'meat', len: 12, scene: 'land',
+    meaning: { id: 'Raja kadal tiran', en: 'Tyrant lizard king' },
+    period: { id: 'Kapur Akhir, 68–66 juta tahun lalu', en: 'Late Cretaceous, 68–66 million years ago' },
+    length: { id: 'sekitar 12 meter', en: 'about 12 meters' },
+    weight: { id: 'sekitar 8 ton (seberat 1 gajah besar lebih)', en: 'about 8 tonnes (heavier than a big elephant)' },
+    place: { id: 'Amerika Utara', en: 'North America' },
+    desc: {
+      id: 'T-Rex adalah salah satu dinosaurus pemakan daging terbesar yang pernah hidup. Kepalanya besar sekali dan giginya tajam seperti pisau. Kakinya kuat untuk berjalan dan berlari, tapi tangannya pendek sekali, hanya punya dua jari. T-Rex juga punya penciuman yang sangat tajam untuk mencari makanan.',
+      en: 'T. rex was one of the biggest meat-eating dinosaurs that ever lived. Its head was huge and its teeth were sharp like knives. Its legs were strong for walking and running, but its arms were very short, with only two fingers. T. rex also had a super strong sense of smell to find food.',
+    },
+    facts: {
+      id: ['Giginya bisa sepanjang pisang besar!', 'Gigitannya termasuk yang paling kuat dari semua hewan darat.', 'T-Rex hidup lebih dekat ke zaman kita daripada ke zaman Stegosaurus!'],
+      en: ['Its teeth could be as long as a big banana!', 'Its bite was one of the strongest of any land animal ever.', 'T. rex lived closer in time to us than to Stegosaurus!'],
+    },
+  },
+  {
+    slug: 'triceratops', name: 'Triceratops', kind: 'ceratopsian', colors: ['#e0904a', '#b36a2c', '#f6d8a8'],
+    sound: 'growl', rate: 1, diet: 'plant', len: 9, scene: 'land',
+    meaning: { id: 'Wajah bertanduk tiga', en: 'Three-horned face' },
+    period: { id: 'Kapur Akhir, 68–66 juta tahun lalu', en: 'Late Cretaceous, 68–66 million years ago' },
+    length: { id: 'sekitar 9 meter', en: 'about 9 meters' },
+    weight: { id: 'sekitar 6–12 ton', en: 'about 6–12 tonnes' },
+    place: { id: 'Amerika Utara', en: 'North America' },
+    desc: {
+      id: 'Triceratops punya tiga tanduk di wajahnya dan perisai tulang besar di belakang kepalanya. Ia pemakan tumbuhan dan memakai paruhnya yang seperti paruh burung beo untuk memotong daun. Triceratops hidup di zaman yang sama dengan T-Rex, jadi tanduknya berguna untuk melindungi diri.',
+      en: 'Triceratops had three horns on its face and a big bony shield, called a frill, behind its head. It ate plants and used its parrot-like beak to snip leaves. Triceratops lived at the same time as T. rex, so its horns were handy for protection.',
+    },
+    facts: {
+      id: ['Dua tanduk di atas matanya bisa sepanjang 1 meter!', 'Di mulutnya ada ratusan gigi yang terus tumbuh ganti yang baru.', 'Perisainya mungkin juga dipakai untuk pamer ke teman-temannya.'],
+      en: ['The two horns above its eyes could be 1 meter long!', 'Its mouth had hundreds of teeth that kept being replaced.', 'Its frill may also have been used to show off to other Triceratops.'],
+    },
+  },
+  {
+    slug: 'brachiosaurus', name: 'Brachiosaurus', kind: 'sauropod', colors: ['#7aa6c9', '#557fa3', '#d4e6f3'],
+    sound: 'rumble', rate: 1, diet: 'plant', len: 22, scene: 'land',
+    meaning: { id: 'Kadal lengan', en: 'Arm lizard' },
+    period: { id: 'Jura Akhir, sekitar 154 juta tahun lalu', en: 'Late Jurassic, about 154 million years ago' },
+    length: { id: 'sekitar 22 meter', en: 'about 22 meters' },
+    weight: { id: 'sekitar 30–50 ton', en: 'about 30–50 tonnes' },
+    place: { id: 'Amerika Utara', en: 'North America' },
+    desc: {
+      id: 'Brachiosaurus adalah raksasa berleher sangat panjang. Kaki depannya lebih panjang dari kaki belakangnya, jadi punggungnya miring seperti jerapah. Dengan lehernya, ia bisa makan daun di pucuk pohon yang tinggi, yang tidak bisa dicapai dinosaurus lain.',
+      en: 'Brachiosaurus was a giant with a super long neck. Its front legs were longer than its back legs, so its back sloped like a giraffe. With its long neck it could eat leaves from the tops of tall trees that other dinosaurs could not reach.',
+    },
+    facts: {
+      id: ['Kepalanya bisa mencapai setinggi gedung 4 lantai!', 'Ia menelan daun hampir tanpa mengunyah.', 'Namanya "kadal lengan" karena kaki depannya panjang sekali.'],
+      en: ['Its head could reach as high as a 4-story building!', 'It swallowed leaves almost without chewing.', 'It is called "arm lizard" because its front legs were so long.'],
+    },
+  },
+  {
+    slug: 'stegosaurus', name: 'Stegosaurus', kind: 'stego', colors: ['#9c7ad1', '#6f50a6', '#f2b84b'],
+    sound: 'growl', rate: 1.15, diet: 'plant', len: 9, scene: 'land',
+    meaning: { id: 'Kadal beratap', en: 'Roof lizard' },
+    period: { id: 'Jura Akhir, 155–145 juta tahun lalu', en: 'Late Jurassic, 155–145 million years ago' },
+    length: { id: 'sekitar 9 meter', en: 'about 9 meters' },
+    weight: { id: 'sekitar 5 ton', en: 'about 5 tonnes' },
+    place: { id: 'Amerika Utara dan Portugal', en: 'North America and Portugal' },
+    desc: {
+      id: 'Stegosaurus punya deretan lempeng tulang besar di punggungnya dan empat duri tajam di ujung ekornya. Kalau ada pemangsa datang, ia mengayunkan ekor berdurinya untuk melawan. Kepalanya kecil sekali dibandingkan tubuhnya yang besar.',
+      en: 'Stegosaurus had rows of big bony plates on its back and four sharp spikes at the end of its tail. When a predator came close, it swung its spiky tail to fight back. Its head was tiny compared to its big body.',
+    },
+    facts: {
+      id: ['Otaknya kecil, kira-kira seukuran jeruk nipis!', 'Lempeng di punggungnya mungkin untuk pamer atau mengatur suhu tubuh.', 'Duri ekornya bisa sepanjang lengan orang dewasa.'],
+      en: ['Its brain was small, about the size of a lime!', 'The plates on its back may have been for showing off or controlling body heat.', 'Its tail spikes could be as long as a grown-up\'s arm.'],
+    },
+  },
+  {
+    slug: 'velociraptor', name: 'Velociraptor', kind: 'raptor', colors: ['#c9a24a', '#8f6f25', '#f3e3b3'],
+    sound: 'screech', rate: 1, diet: 'meat', len: 2, scene: 'land',
+    meaning: { id: 'Pencuri yang cepat', en: 'Swift thief' },
+    period: { id: 'Kapur Akhir, 75–71 juta tahun lalu', en: 'Late Cretaceous, 75–71 million years ago' },
+    length: { id: 'sekitar 2 meter (kebanyakan ekor)', en: 'about 2 meters (mostly tail)' },
+    weight: { id: 'sekitar 15–20 kg, seukuran kalkun', en: 'about 15–20 kg, the size of a turkey' },
+    place: { id: 'Mongolia (Gurun Gobi)', en: 'Mongolia (Gobi Desert)' },
+    desc: {
+      id: 'Velociraptor adalah pemburu kecil yang lincah dan pintar. Di film ia terlihat besar, tapi aslinya hanya seukuran kalkun! Velociraptor punya bulu seperti burung dan cakar melengkung besar di jari kakinya untuk menangkap mangsa.',
+      en: 'Velociraptor was a small, quick and clever hunter. In movies it looks big, but in real life it was only the size of a turkey! Velociraptor had feathers like a bird and a big curved claw on its foot to catch prey.',
+    },
+    facts: {
+      id: ['Ilmuwan menemukan bekas tempat bulu di tulang lengannya.', 'Cakar kakinya yang melengkung panjangnya sekitar 6 cm.', 'Ada fosil Velociraptor yang ditemukan sedang bertarung dengan Protoceratops!'],
+      en: ['Scientists found bumps for feathers on its arm bones.', 'Its curved toe claw was about 6 cm long.', 'One fossil shows a Velociraptor locked in a fight with a Protoceratops!'],
+    },
+  },
+  {
+    slug: 'ankylosaurus', name: 'Ankylosaurus', kind: 'ankylo', colors: ['#8a8f5a', '#5f6338', '#d8c78f'],
+    sound: 'growl', rate: 0.8, diet: 'plant', len: 7, scene: 'land',
+    meaning: { id: 'Kadal yang menyatu', en: 'Fused lizard' },
+    period: { id: 'Kapur Akhir, 68–66 juta tahun lalu', en: 'Late Cretaceous, 68–66 million years ago' },
+    length: { id: 'sekitar 6–8 meter', en: 'about 6–8 meters' },
+    weight: { id: 'sekitar 5–8 ton', en: 'about 5–8 tonnes' },
+    place: { id: 'Amerika Utara', en: 'North America' },
+    desc: {
+      id: 'Ankylosaurus seperti tank berjalan! Punggungnya tertutup baju zirah dari lempeng tulang yang keras. Di ujung ekornya ada gada tulang besar yang bisa diayunkan untuk memukul pemangsa. Ia pemakan tumbuhan yang berjalan pelan dengan empat kaki pendek.',
+      en: 'Ankylosaurus was like a walking tank! Its back was covered in armor made of hard bony plates. At the end of its tail was a big bony club it could swing at predators. It was a slow plant-eater walking on four short legs.',
+    },
+    facts: {
+      id: ['Bahkan kelopak matanya punya pelindung tulang!', 'Gada ekornya bisa memukul sangat keras.', 'Tubuhnya lebar dan rendah, sulit dibalik oleh pemangsa.'],
+      en: ['Even its eyelids had bony armor!', 'Its tail club could hit really hard.', 'Its body was wide and low, so predators could hardly flip it over.'],
+    },
+  },
+  {
+    slug: 'parasaurolophus', name: 'Parasaurolophus', kind: 'hadrosaur', colors: ['#e06a7a', '#a8404f', '#ffd0d6'],
+    sound: 'honk', rate: 1, diet: 'plant', len: 9.5, scene: 'land',
+    meaning: { id: 'Hampir seperti kadal berjambul', en: 'Near crested lizard' },
+    period: { id: 'Kapur Akhir, 76–73 juta tahun lalu', en: 'Late Cretaceous, 76–73 million years ago' },
+    length: { id: 'sekitar 9,5 meter', en: 'about 9.5 meters' },
+    weight: { id: 'sekitar 2,5 ton', en: 'about 2.5 tonnes' },
+    place: { id: 'Amerika Utara', en: 'North America' },
+    desc: {
+      id: 'Parasaurolophus adalah dinosaurus paruh bebek dengan jambul panjang melengkung di kepalanya. Jambul itu berlubang di dalamnya, terhubung ke hidung. Ilmuwan percaya ia bisa meniup udara lewat jambulnya untuk membuat suara keras seperti terompet!',
+      en: 'Parasaurolophus was a duck-billed dinosaur with a long curved crest on its head. The crest was hollow inside and connected to its nose. Scientists think it could blow air through the crest to make loud sounds like a trumpet!',
+    },
+    facts: {
+      id: ['Jambulnya bisa sepanjang 1,5 meter!', 'Ia bisa berjalan dengan dua kaki atau empat kaki.', 'Ilmuwan pernah membuat tiruan jambulnya dan suaranya seperti trombon.'],
+      en: ['Its crest could be 1.5 meters long!', 'It could walk on two legs or on four.', 'Scientists built a model of its crest and it sounded like a trombone.'],
+    },
+  },
+  {
+    slug: 'spinosaurus', name: 'Spinosaurus', kind: 'spino', colors: ['#d0573f', '#93351f', '#f6c27a'],
+    sound: 'roar-big', rate: 0.85, diet: 'fish', len: 14, scene: 'land',
+    meaning: { id: 'Kadal berduri', en: 'Spine lizard' },
+    period: { id: 'Kapur Tengah, 99–93 juta tahun lalu', en: 'Mid Cretaceous, 99–93 million years ago' },
+    length: { id: 'sekitar 14 meter', en: 'about 14 meters' },
+    weight: { id: 'sekitar 7 ton', en: 'about 7 tonnes' },
+    place: { id: 'Afrika Utara (Mesir, Maroko)', en: 'North Africa (Egypt, Morocco)' },
+    desc: {
+      id: 'Spinosaurus adalah dinosaurus pemakan daging terpanjang yang pernah ditemukan. Di punggungnya ada layar besar dari tulang duri. Moncongnya panjang seperti buaya, cocok untuk menangkap ikan. Ia suka berada di sungai dan bisa berenang!',
+      en: 'Spinosaurus is the longest meat-eating dinosaur ever found. It had a big sail of spines on its back. Its snout was long like a crocodile\'s, perfect for catching fish. It liked to be in rivers and could swim!',
+    },
+    facts: {
+      id: ['Layar di punggungnya lebih tinggi dari orang dewasa!', 'Ekornya pipih seperti dayung untuk berenang.', 'Fosil pertamanya hancur saat Perang Dunia II.'],
+      en: ['The sail on its back was taller than a grown-up!', 'Its tail was flat like a paddle for swimming.', 'Its first fossils were destroyed during World War II.'],
+    },
+  },
+  {
+    slug: 'pteranodon', name: 'Pteranodon', kind: 'pterosaur', colors: ['#6bb7b0', '#3d8079', '#ffb35c'],
+    sound: 'bird-screech', rate: 1, diet: 'fish', len: 6, scene: 'sky', notDino: true,
+    meaning: { id: 'Bersayap tanpa gigi', en: 'Toothless wing' },
+    period: { id: 'Kapur Akhir, 86–84 juta tahun lalu', en: 'Late Cretaceous, 86–84 million years ago' },
+    length: { id: 'bentang sayap sampai 6 meter', en: 'wingspan up to 6 meters' },
+    weight: { id: 'sekitar 25–50 kg', en: 'about 25–50 kg' },
+    place: { id: 'Amerika Utara (dulu laut)', en: 'North America (it was a sea back then)' },
+    desc: {
+      id: 'Pteranodon adalah reptil terbang raksasa. Tapi tahukah kamu? Pteranodon BUKAN dinosaurus! Ia sepupu dinosaurus yang disebut pterosaurus. Sayapnya terbuat dari kulit yang terbentang dari jari panjangnya. Ia terbang di atas laut dan menangkap ikan dengan paruhnya yang tanpa gigi.',
+      en: 'Pteranodon was a giant flying reptile. But guess what? Pteranodon was NOT a dinosaur! It was a cousin of dinosaurs called a pterosaur. Its wings were made of skin stretched from one very long finger. It soared over the sea and caught fish with its toothless beak.',
+    },
+    facts: {
+      id: ['Bentang sayapnya lebih lebar dari mobil!', 'Tulangnya berongga sehingga ringan untuk terbang.', 'Jambul di kepalanya mungkin untuk pamer.'],
+      en: ['Its wingspan was wider than a car!', 'Its bones were hollow, so it was light enough to fly.', 'The crest on its head was probably for showing off.'],
+    },
+  },
+  {
+    slug: 'mosasaurus', name: 'Mosasaurus', kind: 'mosasaur', colors: ['#4a7fc1', '#2c5690', '#bfe0ff'],
+    sound: 'water', rate: 1, diet: 'meat', len: 13, scene: 'sea', notDino: true,
+    meaning: { id: 'Kadal dari Sungai Meuse', en: 'Lizard of the Meuse River' },
+    period: { id: 'Kapur Akhir, 82–66 juta tahun lalu', en: 'Late Cretaceous, 82–66 million years ago' },
+    length: { id: 'sekitar 12–13 meter', en: 'about 12–13 meters' },
+    weight: { id: 'beberapa ton', en: 'several tonnes' },
+    place: { id: 'Eropa (Belanda), Amerika Utara, dan lainnya', en: 'Europe (Netherlands), North America, and more' },
+    desc: {
+      id: 'Mosasaurus adalah raja lautan di zaman dinosaurus. Tapi ia BUKAN dinosaurus! Ia reptil laut yang masih kerabat kadal dan ular. Ia punya sirip seperti dayung, ekor kuat untuk berenang cepat, dan rahang besar penuh gigi tajam. Ia makan ikan, penyu, dan hewan laut lain.',
+      en: 'Mosasaurus was the king of the sea in dinosaur times. But it was NOT a dinosaur! It was a sea reptile related to lizards and snakes. It had paddle-like flippers, a strong tail for fast swimming, and big jaws full of sharp teeth. It ate fish, turtles and other sea animals.',
+    },
+    facts: {
+      id: ['Fosilnya pertama kali ditemukan di Belanda tahun 1764.', 'Ia punya gigi tambahan di langit-langit mulutnya!', 'Kerabat hidupnya yang terdekat adalah biawak.'],
+      en: ['Its first fossil was found in the Netherlands in 1764.', 'It had extra teeth on the roof of its mouth!', 'Its closest living relatives are monitor lizards.'],
+    },
+  },
+];
+
+export const UI = {
+  id: {
+    title: 'Dino Explorer', subtitle: 'Ketuk dinosaurus untuk berkenalan!', quiz: 'Kuis Dino', back: 'Kembali',
+    roar: 'Dengar suaranya', read: 'Bacakan', stop: 'Berhenti', tap: 'Ketuk aku!',
+    meaning: 'Artinya', period: 'Zaman', food: 'Makanan', length: 'Panjang', weight: 'Berat', place: 'Ditemukan di',
+    diet: { plant: '🌿 Pemakan tumbuhan', meat: '🍖 Pemakan daging', fish: '🐟 Pemakan ikan' },
+    howBig: 'Seberapa besar?', you: 'Kamu', timesYou: (n) => `Kira-kira ${n} kali panjang tubuhmu!`,
+    didYouKnow: 'Tahukah kamu?', notDino: 'Bukan dinosaurus!', prev: 'Sebelumnya', next: 'Berikutnya',
+    qWho: 'Siapa aku?', qFood: (n) => `Apa makanan ${n}?`, qBigger: 'Mana yang lebih panjang?',
+    plants: '🌿 Tumbuhan', animals: '🍖 Hewan lain', correct: 'Hebat! Benar!', wrong: 'Hampir! Jawabannya:',
+    nextQ: 'Lanjut ➜', score: (s, t) => `Kamu benar ${s} dari ${t}!`, again: 'Main lagi', home: 'Ke beranda',
+    lang: 'EN', langLabel: 'Switch to English',
+  },
+  en: {
+    title: 'Dino Explorer', subtitle: 'Tap a dinosaur to meet it!', quiz: 'Dino Quiz', back: 'Back',
+    roar: 'Hear it', read: 'Read to me', stop: 'Stop', tap: 'Tap me!',
+    meaning: 'Name means', period: 'When', food: 'Food', length: 'Length', weight: 'Weight', place: 'Found in',
+    diet: { plant: '🌿 Plant-eater', meat: '🍖 Meat-eater', fish: '🐟 Fish-eater' },
+    howBig: 'How big?', you: 'You', timesYou: (n) => `About ${n} times as long as you!`,
+    didYouKnow: 'Did you know?', notDino: 'Not a dinosaur!', prev: 'Previous', next: 'Next',
+    qWho: 'Who am I?', qFood: (n) => `What did ${n} eat?`, qBigger: 'Which one was longer?',
+    plants: '🌿 Plants', animals: '🍖 Other animals', correct: 'Great job! Correct!', wrong: 'So close! The answer is:',
+    nextQ: 'Next ➜', score: (s, t) => `You got ${s} out of ${t}!`, again: 'Play again', home: 'Home',
+    lang: 'ID', langLabel: 'Ganti ke Bahasa Indonesia',
+  },
+};
